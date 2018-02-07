@@ -20,8 +20,11 @@ app.get("/", function (request, response) {
 });
 
 app.get("/api/whoami", function (request, response) {
-  var myobj = {};
-  myobj.language = request.headers["accept-language"];
+  var myobj = {};  
+ var str = request.headers["accept-language"],  
+ arr = str.split(";");
+  myobj.language = arr[0];
+  myobj.software = os.platform;
 publicIp.v4().then(ip => {
 	console.log(ip);
   myobj.ipaddress = ip;

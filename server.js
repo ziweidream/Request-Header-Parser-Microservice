@@ -3,7 +3,6 @@
 
 
 // init project
-var os = require('os');
 
 var express = require('express');
 var app = express();
@@ -25,9 +24,19 @@ app.get("/api/whoami", function (request, response) {
  arr = str.split(";");
   myobj.language = arr[0];
   
-  myobj.software = os.platform;
-myobj.ipaddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
+ 
+
+  var address = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
   
+  var ipaddress = address.split(",");
+  myobj.ipaddress = ipaddress[0];
+ 
+  var agent = request.headers['user-agent'];
+  var user = agent.split(')');
+  var user1 = user[0].split('(');
+  var userAgent = user1[1];
+   myobj.software = user1;
+  response.send(myobj);
   
 });
 

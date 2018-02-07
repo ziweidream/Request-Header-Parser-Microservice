@@ -2,6 +2,8 @@
 // where your node app starts
 
 // init project
+var http = require('http');
+
 var express = require('express');
 var app = express();
 
@@ -18,11 +20,13 @@ app.get("/", function (request, response) {
 
 app.get("/api/whoami", function (request, response) {
   var myobj = {};
-  var ip = request.headers['x-forwarded-for'].split(',').pop() || 
-         request.connection.remoteAddress || 
-         request.socket.remoteAddress || 
-         request.connection.socket.remoteAddress
-  myobj.ipaddress = request.ip;
+  http.get('http://bot.whatismyipaddress.com', function(res){
+    res.setEncoding('utf8');
+    res.on('data', function(chunk){
+        myobj.ipaddress = chunk;
+    });
+});
+  
   response.send(myobj);
 });
 

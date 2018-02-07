@@ -1,5 +1,6 @@
 // server.js
 // where your node app starts
+const publicIp = require('public-ip');
 
 // init project
 var http = require('http');
@@ -20,14 +21,24 @@ app.get("/", function (request, response) {
 
 app.get("/api/whoami", function (request, response) {
   var myobj = {};
-  http.get('http://bot.whatismyipaddress.com', function(res){
-    res.setEncoding('utf8');
-    res.on('data', function(chunk){
-        myobj.ipaddress = chunk;
-    });
+  myobj.language = request.headers["accept-language"];
+publicIp.v4().then(ip => {
+	console.log(ip);
+  myobj.ipaddress = ip;
+	//=> '46.5.21.123'
+
+  response.send(myobj);
+});
+
+publicIp.v6().then(ip => {
+	console.log(ip);
+  myobj.ipaddress = ip;
+	//=> 'fe80::200:f8ff:fe21:67cf'
+ 
+  response.send(myobj);
 });
   
-  response.send(myobj);
+  
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body

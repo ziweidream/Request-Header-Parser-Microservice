@@ -16,8 +16,14 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/dreams", function (request, response) {
-  response.send(dreams);
+app.get("/api/whoami", function (request, response) {
+  var myobj = {};
+  var ip = request.headers['x-forwarded-for'].split(',').pop() || 
+         request.connection.remoteAddress || 
+         request.socket.remoteAddress || 
+         request.connection.socket.remoteAddress
+  myobj.ipaddress = request.ip;
+  response.send(myobj);
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body

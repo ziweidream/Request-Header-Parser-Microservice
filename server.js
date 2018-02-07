@@ -1,9 +1,9 @@
 // server.js
 // where your node app starts
-const publicIp = require('public-ip');
-var os = require('os');
+
+
 // init project
-var http = require('http');
+var os = require('os');
 
 var express = require('express');
 var app = express();
@@ -25,22 +25,8 @@ app.get("/api/whoami", function (request, response) {
  arr = str.split(";");
   myobj.language = arr[0];
   
-  myobj.software = os.platform();
-publicIp.v4().then(ip => {
-	console.log(ip);
-  myobj.ipaddress = ip;
-	//=> '46.5.21.123'
-
-  response.send(myobj);
-});
-
-publicIp.v6().then(ip => {
-	console.log(ip);
-  myobj.ipaddress = ip;
-	//=> 'fe80::200:f8ff:fe21:67cf'
- 
-  response.send(myobj);
-});
+  myobj.software = os.platform;
+myobj.ipaddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
   
   
 });

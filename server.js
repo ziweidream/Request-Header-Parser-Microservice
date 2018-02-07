@@ -1,7 +1,7 @@
 // server.js
 // where your node app starts
 const publicIp = require('public-ip');
-
+var os = require('os');
 // init project
 var http = require('http');
 
@@ -24,7 +24,8 @@ app.get("/api/whoami", function (request, response) {
  var str = request.headers["accept-language"],  
  arr = str.split(";");
   myobj.language = arr[0];
-  myobj.software = os.platform;
+  
+  myobj.software = os.platform();
 publicIp.v4().then(ip => {
 	console.log(ip);
   myobj.ipaddress = ip;
